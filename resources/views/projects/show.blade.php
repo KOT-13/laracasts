@@ -13,7 +13,7 @@
     </div>
 
     @if($project->tasks->count())
-        <div>
+        <div class="box">
             @foreach($project->tasks as $task)
                 <div>
                     <form method="post" action="/tasks/{{ $task->id }}">
@@ -29,5 +29,22 @@
         </div>
     @endif
 
+    <form method="post" action="/projects/{{ $project->id }}/tasks" class="box">
+        @csrf
+        <div class="field">
+            <label class="label" for="description">New Task</label>
+
+            <div class="control">
+                <input type="text" class="input" name="description" placeholder="New Task">
+            </div>
+        </div>
+
+        <div class="field">
+            <div class="control">
+                <button type="submit" class="button is-link">Add Task</button>
+            </div>
+        </div>
+    @include('errors')
+    </form>
 
 @endsection

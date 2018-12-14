@@ -20,4 +20,14 @@ class Project extends Model
     {
         return $this->hasMany(Task::class);
     }
+
+    /**
+     * @param $description
+     * @return mixed
+     */
+    public function addTask($description)
+    {
+        $this->tasks()->create($description);
+
+    }
 }
