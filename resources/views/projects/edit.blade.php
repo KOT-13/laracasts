@@ -3,7 +3,7 @@
 @section('content')
     <h1 class="title">Edit Project</h1>
 
-    <form action="/projects/{{ $project->id }}" method="post">
+    <form action="/projects/{{ $project->id }}" method="post" style="margin-bottom: 1em">
         @method('patch')
         @csrf
         <div class="field">
@@ -29,4 +29,13 @@
         </div>
     </form>
 
+    <form method="post" action="{{ route('projects.destroy', $project) }}">
+        @method('DELETE')
+        @csrf
+        <div class="field">
+            <div class="control">
+                <button type="submit" class="button">Delete Project</button>
+            </div>
+        </div>
+    </form>
 @endsection

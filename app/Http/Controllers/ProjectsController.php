@@ -20,46 +20,61 @@ class ProjectsController extends Controller
         return view('projects.index', compact('projects'));
     }
 
+    /**
+     * @param Project $project
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function show(Project $project)
+    {
+        return view('projects.show', compact('project'));
+    }
+
+    /**
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function create()
     {
         return view('projects.create');
     }
 
+    /**
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
     public function store()
     {
-        $project = new Project;
-
-        $project->title = \request('title');
-        $project->description = \request('description');
-
-        $project->save();
+        Project::create(request(['title', 'description']));
 
         return redirect('/projects');
     }
 
     /**
-     * @param $id
+     * @param Project $project
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function edit($id)
+    public function edit(Project $project)
     {
-        $project = Project::find($id);
         return view('projects.edit', compact('project'));
     }
 
     /**
-     * @param $id
+     * @param Project $project
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
-    public function update($id)
+    public function update(Project $project)
     {
-        $project = Project::find($id);
+        $project->update(request(['title', 'description']));
 
-        $project->title = \request('title');
-        $project->description = \request('description');
+        return redirect('/projects');
+    }
 
-        $project->save();
-
+    /**
+     * @param Project $project
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     * @throws \Exception
+     */
+    public function destroy(Project $project)
+    {
+        $project->delete();
         return redirect('/projects');
     }
 }
