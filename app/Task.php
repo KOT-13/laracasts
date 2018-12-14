@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class Task extends Model
 {
+    protected $guarded = [];
     /**
      * @return BelongsTo
      */
