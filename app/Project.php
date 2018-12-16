@@ -22,12 +22,11 @@ class Project extends Model
     }
 
     /**
-     * @param $description
+     * @param $task
      * @return mixed
      */
-    public function addTask($description)
+    public function addTask($task)
     {
-        $this->tasks()->create($description);
-
+        $this->tasks()->create($task);
     }
 }

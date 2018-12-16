@@ -12,6 +12,20 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Task extends Model
 {
     protected $guarded = [];
+
+    /**
+     * @param bool $completed
+     */
+    public function complete($completed = true)
+    {
+        $this->update(compact('completed'));
+    }
+
+    public function incomplete()
+    {
+        $this->complete(false);
+    }
+
     /**
      * @return BelongsTo
      */

@@ -12,10 +12,15 @@ use Illuminate\Http\Request;
  */
 class ProjectTasksController extends Controller
 {
+    /**
+     * @param Project $project
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function store(Project $project)
     {
-        $attributes = request()->validate(['description' => 'required']);
-        $project->addTask($attributes);
+        $project->addTask(
+            request()->validate(['description' => 'required'])
+        );
 
         return back();
     }
@@ -25,9 +30,9 @@ class ProjectTasksController extends Controller
      */
     public function update(Task $task)
     {
-        $task->update([
-            'completed' => \request()->has('completed')
-        ]);
+        $method = request()->has('completed') ? 'complete' : 'incomplete';
+
+        $task->$method();
 
         return back();
     }
