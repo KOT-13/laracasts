@@ -2,7 +2,7 @@
 
 namespace App;
 
-use App\Mail\ProjectCreated;
+use App\Events\ProjectCreated;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -16,16 +16,9 @@ class Project extends Model
 {
     protected $guarded = [];
 
-    protected static function boot()
-    {
-        parent::boot();
-
-        static::created(function($project) {
-            Mail::to($project->owner->email)->send(
-                new ProjectCreated($project)
-            );
-        });
-    }
+    protected $dispatchesEvents = [
+        'created' => ProjectCreated::class
+    ];
 
     /**
      * @return BelongsTo
