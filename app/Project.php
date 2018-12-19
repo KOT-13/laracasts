@@ -2,8 +2,11 @@
 
 namespace App;
 
+use App\Mail\ProjectCreated;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\Mail;
 
 /**
  * Class Project
@@ -12,6 +15,25 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Project extends Model
 {
     protected $guarded = [];
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::created(function($project) {
+            Mail::to($project->owner->email)->send(
+                new ProjectCreated($project)
+            );
+        });
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function owner(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
 
     /**
      * @return HasMany
