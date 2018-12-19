@@ -29,6 +29,8 @@
         </div>
     </form>
 
+    @include('errors')
+
     <form method="post" action="{{ route('projects.destroy', $project) }}">
         @method('DELETE')
         @csrf

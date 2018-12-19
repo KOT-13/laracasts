@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\ProjectCreated;
 use App\Project;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 /**
  * Class ProjectsController
@@ -21,7 +23,8 @@ class ProjectsController extends Controller
      */
     public function index()
     {
-        $projects = Project::where('owner_id', auth()->id())->get();
+        $projects = auth()->user()->projects;
+
         return view('projects.index', compact('projects'));
     }
 
@@ -49,14 +52,15 @@ class ProjectsController extends Controller
      */
     public function store()
     {
-        $attributes = request()->validate([
-            'title' => 'required|min:3',
-            'description' => 'required|min:3'
-        ]);
+        $attributes = $this->validateProject();
 
         $attributes['owner_id'] = auth()->id();
 
-        Project::create($attributes);
+        $project = Project::create($attributes);
+
+        Mail::to('alex@nazarenco.com')->send(
+          new ProjectCreated($project)
+        );
 
         return redirect('/projects');
     }
@@ -76,7 +80,7 @@ class ProjectsController extends Controller
      */
     public function update(Project $project)
     {
-        $project->update(request(['title', 'description']));
+        $project->update($this->validateProject());
 
         return redirect('/projects');
     }
@@ -90,5 +94,16 @@ class ProjectsController extends Controller
     {
         $project->delete();
         return redirect('/projects');
+    }
+
+    /**
+     * @return mixed
+     */
+    public function validateProject()
+    {
+        return request()->validate([
+            'title' => 'required|min:3',
+            'description' => 'required|min:3'
+        ]);
     }
 }
